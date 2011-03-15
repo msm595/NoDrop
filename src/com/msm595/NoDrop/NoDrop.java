@@ -11,6 +11,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.event.Event;
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -30,9 +31,9 @@ public class NoDrop extends JavaPlugin{
     private ArrayList<Player> died = new ArrayList<Player>();
     
     
-    private ArrayList<String> drop = (ArrayList<String>)conf.getStringList("drop", null);
-    private ArrayList<String> nodrop = (ArrayList<String>)conf.getStringList("nodrop", null);
-    private ArrayList<String> keep = (ArrayList<String>)conf.getStringList("keep", null);
+    private ArrayList<String> drop;
+    private ArrayList<String> nodrop;
+    private ArrayList<String> keep;
     
     //@Override
     public void onLoad() {
@@ -64,6 +65,10 @@ public class NoDrop extends JavaPlugin{
         pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Event.Priority.Normal, this);
         
+        drop = (ArrayList<String>)conf.getStringList("drop", null);
+        nodrop = (ArrayList<String>)conf.getStringList("nodrop", null);
+        keep = (ArrayList<String>)conf.getStringList("keep", null);
+        
         System.out.println( "["+pdfFile.getName() + "] " + pdfFile.getVersion() + " is enabled!" );
     }
     
@@ -73,7 +78,8 @@ public class NoDrop extends JavaPlugin{
     }
     
     public void addDrop(Player player) {
-        drops.put(player, new NDInventory(player, this));
+        if(!drops.containsKey(player))
+            drops.put(player, new NDInventory(player, this));
     }
     
     public void getDrop(Player player) {
@@ -105,13 +111,22 @@ public class NoDrop extends JavaPlugin{
     }
     
     public boolean drops(String item) {
+        if(drop!=null) {
+            return drop.contains(item);
+        } else if(nodrop!=null) {
+            return !nodrop.contains(item);
+        }
         
-        
-        return false; //TODO
+        System.err.println("Neither drop nor nodrop are listed, everything will be dropped.");
+        return true; //they didn't have drop or nodrop
     }
     
     public boolean keeps(String item) {
-        return keep==null || keep.contains(item);
+        return (keep==null || keep.contains(item))&&(!drops(item));
+    }
+    
+    public ArrayList<ItemStack> armors(Player player) {
+        return drops.get(player).getArmor();
     }
     
 //    public boolean storeDrop(Player player) {

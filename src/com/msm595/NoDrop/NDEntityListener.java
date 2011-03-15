@@ -10,6 +10,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
 /**
  *
  * @author Alex
@@ -31,7 +33,6 @@ public class NDEntityListener extends EntityListener{
         
         if(plugin.noDrop(player) && player.getHealth()-event.getDamage()<1) {
              //player is about to die, store inventory
-            
             plugin.addDrop(player);
         }
     }
@@ -43,8 +44,26 @@ public class NDEntityListener extends EntityListener{
         Player player = (Player)event.getEntity();        
         if(!plugin.noDrop(player)) return; //only if they are set to not drop
         
-        while(!event.getDrops().isEmpty()) {
-            event.getDrops().remove(0);
+        ArrayList<ItemStack> armor = plugin.armors(player);
+        
+        for(int i=0;i<event.getDrops().size();i++) {
+            if(event.getDrops().get(i)!=null
+                    && !plugin.drops(""+event.getDrops().get(i).getTypeId())
+                    && !armor.contains(event.getDrops().get(i))) {
+                event.getDrops().remove(i);
+                i--;
+            }
         }
+        
+        if(!plugin.drops("equipped armor") && !plugin.drops("helmet"))
+            event.getDrops().remove(armor.get(0));
+        if(!plugin.drops("equipped armor") && !plugin.drops("chestplate"))
+            event.getDrops().remove(armor.get(1));
+        if(!plugin.drops("equipped armor") && !plugin.drops("leggings"))
+            event.getDrops().remove(armor.get(2));
+        if(!plugin.drops("equipped armor") && !plugin.drops("boots"))
+            event.getDrops().remove(armor.get(3));
+        if(!plugin.drops("held item"))
+            event.getDrops().remove(armor.get(4));
     }
 }

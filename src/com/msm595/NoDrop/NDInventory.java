@@ -10,6 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
+
+import java.util.ArrayList;
 /**
  *
  * @author Alex
@@ -40,7 +42,24 @@ public class NDInventory {
         heldS=inv.getHeldItemSlot();
         held = contents[heldS];
         contents[heldS] = null;
-        System.out.println(held.getType().name());
+        
+        //remove them from inventory if they don't drop
+//        if(!plugin.drops("helmet"))
+//            inv.setHelmet(null);
+//        if(!plugin.drops("chestplate"))
+//            inv.setChestplate(null);
+//        if(!plugin.drops("leggings"))
+//            inv.setLeggings(null);
+//        if(!plugin.drops("boots"))
+//            inv.setBoots(null);
+//        
+//        if(!plugin.drops("held item"))
+//            inv.remove(heldS);
+//        
+//        for(ItemStack i : contents) {
+//            if(i!=null&&!plugin.drops(""+i.getTypeId()))
+//                inv.remove(i);
+//        }
     }
     
     public void restore(Player player) {
@@ -48,29 +67,48 @@ public class NDInventory {
         player.updateInventory();
     }
     
+    public ArrayList<ItemStack> getArmor() {
+        ArrayList<ItemStack> i = new ArrayList<ItemStack>();
+        i.add(helmet);
+        i.add(chestplate);
+        i.add(leggings);
+        i.add(boots);
+        i.add(held);
+        return i;
+    }
+    
     public void restore(PlayerInventory inv) {
         
-        if(plugin.keeps("boots")||plugin.keeps("equiped armor")
-                || plugin.keeps(""+boots.getTypeId()))
-            inv.setBoots(boots);
+        if(boots!=null && boots.getTypeId()!=0) {
+            if((plugin.keeps("equipped armor") && !plugin.drops("boots"))
+                    || plugin.keeps(""+boots.getTypeId()))
+                inv.setBoots(boots);
+        }
+        
 
-        if(plugin.keeps("chestplate")||plugin.keeps("equiped armor")
-                || plugin.keeps(""+chestplate.getTypeId()))
-            inv.setChestplate(chestplate);
+        if(chestplate!=null && chestplate.getTypeId()!=0) {
+            if((plugin.keeps("equipped armor") && !plugin.drops("chestplate"))
+                    || plugin.keeps(""+chestplate.getTypeId()))
+                inv.setChestplate(chestplate);
+        }
 
-        if(plugin.keeps("helmet")||plugin.keeps("equiped armor")
-                || plugin.keeps(""+helmet.getTypeId()))
-            inv.setHelmet(helmet);
+        if(leggings!=null && leggings.getTypeId()!=0) {
+            if((plugin.keeps("equipped armor") && !plugin.drops("leggings"))
+                    || plugin.keeps(""+leggings.getTypeId()))
+                inv.setLeggings(leggings);
+        }
 
-        if(plugin.keeps("leggings")||plugin.keeps("equiped armor")
-                || plugin.keeps(""+leggings.getTypeId()))
-            inv.setLeggings(leggings);
+        if(helmet!=null && helmet.getTypeId()!=0) {
+            if((plugin.keeps("equipped armor") && !plugin.drops("helmet"))
+                    || plugin.keeps(""+helmet.getTypeId()))
+                inv.setHelmet(helmet);
+        }
         
         
         
         for(int i=0;i<contents.length;i++) {
             if(contents[i]!=null&&!plugin.keeps(""+contents[i].getTypeId()))
-                contents[i]=null;
+                contents[i].setTypeId(0);
         }
         
         if(plugin.keeps("held item") || plugin.keeps(""+held.getTypeId()))
