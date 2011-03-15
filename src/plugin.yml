@@ -1,6 +1,6 @@
 name: NoDrop
 main: com.msm595.NoDrop.NoDrop
-version: 0.1.0
+version: 0.2.0
 author: Msm595
 description: >
              Lightweight anti-drop plugin
