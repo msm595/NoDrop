@@ -112,9 +112,9 @@ public class NoDrop extends JavaPlugin{
     
     public boolean drops(String item) {
         if(drop!=null) {
-            return drop.contains(item);
+            return drop.contains("all")||drop.contains(item);
         } else if(nodrop!=null) {
-            return !nodrop.contains(item);
+            return !nodrop.contains("all")&&!nodrop.contains(item);
         }
         
         System.err.println("Neither drop nor nodrop are listed, everything will be dropped.");
@@ -122,7 +122,7 @@ public class NoDrop extends JavaPlugin{
     }
     
     public boolean keeps(String item) {
-        return (keep==null || keep.contains(item))&&(!drops(item));
+        return (keep==null || keep.contains("all") || keep.contains(item))&&(!drops(item));
     }
     
     public ArrayList<ItemStack> armors(Player player) {
