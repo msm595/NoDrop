@@ -78,7 +78,7 @@ public class NoDrop extends JavaPlugin{
     }
     
     public void addDrop(Player player) {
-        if(!drops.containsKey(player))
+        //if(!drops.containsKey(player))
             drops.put(player, new NDInventory(player, this));
     }
     
