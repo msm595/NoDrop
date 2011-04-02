@@ -42,24 +42,6 @@ public class NDInventory {
         heldS=inv.getHeldItemSlot();
         held = contents[heldS];
         contents[heldS] = null;
-        
-        //remove them from inventory if they don't drop
-//        if(!plugin.drops("helmet"))
-//            inv.setHelmet(null);
-//        if(!plugin.drops("chestplate"))
-//            inv.setChestplate(null);
-//        if(!plugin.drops("leggings"))
-//            inv.setLeggings(null);
-//        if(!plugin.drops("boots"))
-//            inv.setBoots(null);
-//        
-//        if(!plugin.drops("held item"))
-//            inv.remove(heldS);
-//        
-//        for(ItemStack i : contents) {
-//            if(i!=null&&!plugin.drops(""+i.getTypeId()))
-//                inv.remove(i);
-//        }
     }
     
     public void restore(Player player) {

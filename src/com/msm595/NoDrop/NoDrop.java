@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.io.File;
+
 /**
  *
  * @author Alex Epifano
@@ -18,6 +19,7 @@ import java.io.File;
  * @license Creative Commons Attribution-ShareAlike 3.0 Unported License
  * http://creativecommons.org/licenses/by-sa/3.0/
  */
+
 public class NoDrop extends JavaPlugin{
     NDEntityListener entityListener = new NDEntityListener(this);
     NDPlayerListener playerListener = new NDPlayerListener(this);
@@ -46,10 +48,13 @@ public class NoDrop extends JavaPlugin{
         
         if(getDataFolder().mkdir()) {
             conf.load();
+            conf.setProperty("useFor", "all");
+            conf.setProperty("nodrop", "all");
+            conf.setProperty("keep", "all");
             conf.save();
-            System.out.println("["+pdfFile.getName().toUpperCase() + "] The settings file been created. Please set it up before using the plugin. The plugin will be disabled until you do.");
-            pm.disablePlugin(this);
-            return;
+            System.out.println("["+pdfFile.getName().toUpperCase() + "] The settings file been created. Please set it up before using the plugin. Check the thread to see how to set it up.");
+            //pm.disablePlugin(this);
+            //return;
         }
         
         if(conf.getProperty("useFor")==null) {
@@ -100,7 +105,6 @@ public class NoDrop extends JavaPlugin{
     
     
     public boolean noDrop(Player player) {
-        //TODO
         if(player.isOp()) {
             return !"not ops".equals(conf.getString("useFor"));
         }
@@ -126,9 +130,4 @@ public class NoDrop extends JavaPlugin{
     public ArrayList<ItemStack> armors(Player player) {
         return drops.get(player).getArmor();
     }
-    
-//    public boolean storeDrop(Player player) {
-//        //TODO
-//        return player.isOp();
-//    }
 }
