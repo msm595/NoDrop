@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.msm595.NoDrop;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,7 +13,10 @@ import java.util.ArrayList;
 import java.io.File;
 /**
  *
- * @author Alex
+ * @author Alex Epifano
+ * 
+ * @license Creative Commons Attribution-ShareAlike 3.0 Unported License
+ * http://creativecommons.org/licenses/by-sa/3.0/
  */
 public class NoDrop extends JavaPlugin{
     NDEntityListener entityListener = new NDEntityListener(this);
@@ -35,7 +33,7 @@ public class NoDrop extends JavaPlugin{
     private ArrayList<String> nodrop;
     private ArrayList<String> keep;
     
-    //@Override
+    @Override
     public void onLoad() {
         
     }
